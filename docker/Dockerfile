@@ -1,4 +1,4 @@
-FROM python:3.10.7-slim
+FROM python:3.10-slim-bullseye
 
 # Dockerfile to build an image with the latest main branch on git.
 # !! The secrets must be in a file .config.json which is NOT present in the image
@@ -9,23 +9,23 @@ LABEL "origin"="https://github.com/SAP-samples/hana-enterprise-search-engine"
 
 ENV APP_FOLDER=/home/appowner/hana-esh-odata
 
-RUN RUN addgroup --gid 1001 appowner \
-    && adduser --disabled-login -q -u 1001 --gid 1001 appowner
+RUN addgroup --gid 1000 appowner \
+    && adduser --disabled-login -q -u 1000 --gid 1000 appowner
 
 USER appowner
 
-ADD --chown=appowner:appowner https://codeload.github.com/SAP-samples/hana-enterprise-search-engine/tar.gz/refs/heads/main /home/appowner/hana-esh-odata.tar.gz
-
-WORKDIR /home/appowner
-
-RUN tar -xzf ./hana-esh-odata.tar.gz \
-    && mv hana-enterprise-search-engine-main ${APP_FOLDER} \
-    && rm -f ./hana-esh-odata.tar.gz \
-    && python3 -m pip install --user -r ${APP_FOLDER}/requirements/core.txt
-
-
 WORKDIR ${APP_FOLDER}
+
+#copy sources
+RUN mkdir -p src static 
+COPY --chown=1000:1000 ./src ./src/
+COPY --chown=1000:1000 ./static ./static
+
+#install python libraries 
+COPY --chown=1000:1000 ./requirements/core.txt ./requirements.txt
+RUN python3 -m pip install -r requirements.txt --no-cache-dir 
 
 EXPOSE 8000
 
-CMD ["python3", "src/server.py"]
+#CMD ["python3", "src/server.py"]
+ENTRYPOINT ["python3", "src/server.py"]
