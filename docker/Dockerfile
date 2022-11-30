@@ -16,10 +16,11 @@ RUN addgroup --gid 1000 appowner \
 
 USER appowner
 
+RUN mkdir -p ${APP_FOLDER}/src ${APP_FOLDER}/static
+
 WORKDIR ${APP_FOLDER}
 
 #copy sources
-RUN mkdir -p src static 
 COPY --chown=1000:1000 ./src ./src/
 COPY --chown=1000:1000 ./static ./static
 
