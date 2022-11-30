@@ -7,6 +7,8 @@ FROM python:3.10-slim-bullseye
 
 LABEL "origin"="https://github.com/SAP-samples/hana-enterprise-search-engine"
 
+LABEL org.opencontainers.image.source=https://github.com/remi-sap/hana-enterprise-search-engine
+
 ENV APP_FOLDER=/home/appowner/hana-esh-odata
 
 RUN addgroup --gid 1000 appowner \
