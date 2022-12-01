@@ -1,9 +1,17 @@
 FROM python:3.10-slim
 
-# Dockerfile to build an image with the latest main branch on git.
 # !! The secrets must be in a file .config.json which is NOT present in the image
 # !! The .config.json must be added at runtime:
 # docker run -ti --mount type=bind,source=$(pwd)/src/.config.json,target=/home/appowner/hana-esh-odata/src/.config.json,readonly hana-esh 
+
+# in Kubernetes, you should put the .config.json into a secret:
+# > kubectl create secret generic hana-esh-odata-config --from-file=.config.json
+# Mount the secret into a file with this yaml section in the deployment:
+# volumeMounts:
+#  - mountPath: /home/appowner/hana-esh-odata/src/.config.json
+#    subPath: .config.json
+#    name: hana-esh-odata-config
+#    readOnly: true
 
 LABEL "origin"="https://github.com/SAP-samples/hana-enterprise-search-engine"
 
