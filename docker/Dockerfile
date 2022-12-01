@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# !! The secrets must be in a file .config.json which is NOT present in the image
+# !! The HANA Credential secrets must be in a file .config.json which is NOT present in the image
 # !! The .config.json must be added at runtime:
 # docker run -ti --mount type=bind,source=$(pwd)/src/.config.json,target=/home/appowner/hana-esh-odata/src/.config.json,readonly hana-esh 
 
@@ -23,8 +23,6 @@ RUN addgroup --gid 1000 appowner \
     && adduser --disabled-login -q -u 1000 --gid 1000 appowner
 
 USER appowner
-
-RUN mkdir -p ${APP_FOLDER}/src ${APP_FOLDER}/static
 
 WORKDIR ${APP_FOLDER}
 
