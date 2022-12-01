@@ -17,22 +17,27 @@ LABEL "origin"="https://github.com/SAP-samples/hana-enterprise-search-engine"
 
 LABEL org.opencontainers.image.source=https://github.com/SAP-samples/hana-enterprise-search-engine
 
-ENV APP_FOLDER=/home/appowner/hana-esh-odata
+LABEL description "ODATA Gateway for SAP HANA Enterprise Search (ESH) SQL interface"
 
-RUN addgroup --gid 1000 appowner \
-    && adduser --disabled-login -q -u 1000 --gid 1000 appowner
+ARG USERNAME=esh
 
-USER appowner
+ENV APP_FOLDER=/home/${USERNAME}/hana-esh-odata
+
+RUN addgroup --gid 1000 ${USERNAME} \
+    && adduser --disabled-login -q -u 1000 --gid 1000 ${USERNAME}
+
+USER 1000:1000
 
 WORKDIR ${APP_FOLDER}
-
-#copy sources
-COPY --chown=1000:1000 ./src ./src/
-COPY --chown=1000:1000 ./static ./static
 
 #install python dependencies 
 COPY --chown=1000:1000 ./requirements/core.txt ./requirements.txt
 RUN python3 -m pip install -r requirements.txt --no-cache-dir --disable-pip-version-check
+
+#copy source code
+COPY --chown=1000:1000 ./src ./src/
+COPY --chown=1000:1000 ./static ./static
+
 
 EXPOSE 8000
 
