@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bullseye
+FROM python:3.10-slim
 
 # Dockerfile to build an image with the latest main branch on git.
 # !! The secrets must be in a file .config.json which is NOT present in the image
@@ -7,7 +7,7 @@ FROM python:3.10-slim-bullseye
 
 LABEL "origin"="https://github.com/SAP-samples/hana-enterprise-search-engine"
 
-LABEL org.opencontainers.image.source=https://github.com/remi-sap/hana-enterprise-search-engine
+LABEL org.opencontainers.image.source=https://github.com/SAP-samples/hana-enterprise-search-engine
 
 ENV APP_FOLDER=/home/appowner/hana-esh-odata
 
@@ -24,11 +24,10 @@ WORKDIR ${APP_FOLDER}
 COPY --chown=1000:1000 ./src ./src/
 COPY --chown=1000:1000 ./static ./static
 
-#install python libraries 
+#install python dependencies 
 COPY --chown=1000:1000 ./requirements/core.txt ./requirements.txt
-RUN python3 -m pip install -r requirements.txt --no-cache-dir 
+RUN python3 -m pip install -r requirements.txt --no-cache-dir --disable-pip-version-check
 
 EXPOSE 8000
 
-#CMD ["python3", "src/server.py"]
 ENTRYPOINT ["python3", "src/server.py"]
