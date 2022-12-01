@@ -1,4 +1,6 @@
-fastapi
-uvicorn
-hdbcli
-httpx
+#setting major.minor versions.
+#patches should be picked up.
+fastapi~=0.82
+uvicorn~=0.18
+hdbcli~=2.14
+httpx~=0.23
