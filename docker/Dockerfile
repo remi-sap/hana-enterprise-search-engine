@@ -2,7 +2,7 @@ FROM python:3.10-slim-bullseye
 
 # Dockerfile to build an image with the latest main branch on git.
 # !! The secrets must be in a file .config.json which is NOT present in the image
-# !! The .config.json must be added at runtime:
+# !! The .config.json must be added at runtime:  
 # docker run -ti --mount type=bind,source=$(pwd)/src/.config.json,target=/home/appowner/hana-esh-odata/src/.config.json,readonly hana-esh 
 
 LABEL "origin"="https://github.com/SAP-samples/hana-enterprise-search-engine"
